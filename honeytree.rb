@@ -10,4 +10,4 @@ require 'pp'
 
 ht = Honeytree.new
 
-puts ht.find_nearby_trees("40.6223262 -73.955483", "1") # EMJC, of course
+pp ht.find_tree_percentages(ht.find_nearby_trees("40.6223262 -73.955483", "1")) # EMJC, of course

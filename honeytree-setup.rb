@@ -9,4 +9,9 @@ require 'optparse'
 
 
 ht = Honeytree.new
-ht.import_csv ARGV[0]
+
+if ARGV[0] == "tree-details"
+	ht.add_details
+else
+	ht.add_census ARGV[0]
+end
