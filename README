@@ -1,3 +1,7 @@
 What kinds of trees are your bees likely foraging from, given a hive location and the NYC tree census data? (And thus, what kind of nectar is likely part of your honey?) Time to find out!
   
-(In progress.)
+TODO:  
+Visualize results as an artistic Huffman tree  
+Style front page better  
+Include tree data from other boroughs  
+Deploy on Dreamhost
