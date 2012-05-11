@@ -1,5 +1,5 @@
 $:.unshift File.expand_path('.')
-require 'honeytree-lib'
+require 'lib/honeytree'
 
 def depth(tree)
     if tree.class == Array
