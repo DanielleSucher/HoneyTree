@@ -12,10 +12,12 @@ cgi = CGI.new 'html3'
 params = cgi.params
 
 ht = Honeytree.new
-percentages = ht.find_tree_percentages(ht.find_nearby_trees(params['address'][0], "1"))
+ht.find_nearby_trees params['address'][0], "1"
+ht.find_tree_percentages
+ht.huffman_encode_trees
 
 results = "["
-percentages.each do |k,v|
+ht.percentages.each do |k,v|
 	results.concat("{name: '#{k}', val: #{v}},")
 end
 results = results[0...-1] + "]"

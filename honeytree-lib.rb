@@ -3,11 +3,14 @@ require 'csv'
 require 'pp'
 
 class Honeytree
-	attr_accessor :client
+	attr_accessor :client, :trees, :percentages, :encoded
 
 	def initialize
 		@client = Mysql2::Client.new :host => "localhost", :username => "honey",
 									 :password => "esther", :database => "honeytree"
+		@trees = {}
+		@percentages = {}
+		@encoded = []
 	end
 
 	def create_census_table
@@ -74,33 +77,39 @@ class Honeytree
 		p.map! { |x| x = x.to_f }
 		m = miles.to_f
 		results = find_trees_in_square(p, m)
-		trees = {}
 		results.each do |row|
 			# puts row
 			pt = row["AsText(trees.latlong)"].gsub(/[^\d\s\.-]/, "").split(" ").map! { |x| x = x.to_f }
 			dist = haversine(p,pt)
 			if dist <= m
-				trees[row['name']] ||= 0
-				trees[row['name']] += 1
+				@trees[row['name']] ||= 0
+				@trees[row['name']] += 1
 			end
 		end
-		return trees
 	end
 
 	def radians(degrees)
 		degrees * Math::PI / 180
 	end
 
-	def find_tree_percentages(trees)
+	def find_tree_percentages
 		total = 0
-		percentages = {}
-		trees.each { |k,v| total += v }
-		trees.each do |k,v|
+		@trees.each { |k,v| total += v }
+		@trees.each do |k,v|
 			p = ((v * 100.0) / total).round(2)
-			percentages[k] = p if p >= 1
+			@percentages[k] = p if p >= 1
 		end
-		percentages['other'] = (100 - percentages.inject(0) { |res,(k,v)| res + v }).round(2)
-		return percentages
+		@percentages['other'] = (100 - @percentages.inject(0) { |res,(k,v)| res + v }).round(2)
+	end
+
+	def huffman_encode_trees
+		@encoded = @percentages.sort_by { |k,v| v }
+		until @encoded.length == 1
+			a,b = @encoded.shift, @encoded.shift
+			branch = [a, b, (a[-1] + b[-1]).round(2)]
+			@encoded.push branch
+			@encoded.sort! { |a,b| a[-1] <=> b[-1] }
+		end
+		@encoded = @encoded[0]
 	end
 end
-
