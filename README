@@ -3,7 +3,6 @@ What kinds of trees are your bees likely foraging from, given a hive location an
 TODO:  
 Improve Huffman tree visualization  
 Improve front page styling  
-Deploy on Dreamhost (with tree data from 4/5 boroughs (Staten Island was unavailable in csv))  
   
   
 NYC tree census data obtained from: https://nycopendata.socrata.com/
