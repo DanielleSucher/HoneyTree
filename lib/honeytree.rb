@@ -26,12 +26,12 @@ class Honeytree
 	def import_tree_census(file)
 		CSV.foreach(file, :headers => true) do |row|
 			@client.query "INSERT INTO trees (latlong, species) VALUES 
-						  (GeomFromText('POINT(#{row['Shape'].gsub(/,|\(|\)/,"")})'), '#{row['SPECIES']}')"
+						  (GeomFromText('POINT(#{row['Shape'].gsub(/,|\(|\)/,"")})'), '#{row['SPECIES']}')" if row['Shape']
 		end
 	end
 
 	def import_details
-		CSV.foreach("tree-details", :headers => true) do |row|
+		CSV.foreach("csv/tree-details", :headers => true) do |row|
 			@client.query "INSERT INTO details (symbol, name, season) VALUES ('#{row['symbol']}',
 						   '#{row['name']}', '#{row['season']}')"
 		end

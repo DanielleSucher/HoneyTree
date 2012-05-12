@@ -46,7 +46,7 @@ function geocodeAndSubmit(){
         if (status == google.maps.GeocoderStatus.OK) {
             coords = results[0]['geometry']['location']['$a'] + ' ' + results[0]['geometry']['location']['ab'];
             document.getElementById("coords").value = coords;
-            alert(document.getElementById("coords").value);
+            // alert(document.getElementById("coords").value);
             document.findTrees.submit();
         } else {
             alert("Geocode was not successful for the following reason: " + status);
