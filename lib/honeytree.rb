@@ -3,7 +3,7 @@ require 'csv'
 require 'pp'
 
 class Honeytree
-	attr_accessor :client, :trees, :percentages, :encoded
+	attr_accessor :client, :trees, :percentages, :encoded, :d3
 
 	def initialize
 		@client = Mysql2::Client.new :host => "localhost", :username => "honey",
@@ -111,5 +111,74 @@ class Honeytree
 			@encoded.sort! { |a,b| a[-1] <=> b[-1] }
 		end
 		@encoded = @encoded[0]
+	end
+
+	def parse_for_d3
+		parser = HuffmanD3Parser.new
+		@d3 = parser.parse_for_d3 @encoded, @percentages
+	end
+end
+
+
+class HuffmanD3Parser
+	attr_accessor :nested_array
+
+	def parse_for_d3(nested_array, percentages)
+		@nested_array = nested_array
+		@percentages = percentages
+		weightless = remove_weights @nested_array
+		flatleaf = flatten_leaves weightless
+		parsed = stringify flatleaf
+		until parsed.class == String
+			parsed = nestify parsed
+		end
+		# parsed.concat ";"
+		return parsed
+	end
+
+	def remove_weights(branch)
+		branch.pop
+		branch.each do |twig|
+			remove_weights(twig) if twig.class == Array
+		end
+	end
+
+	def flatten_leaves(branch)
+		if branch[0].class == String
+			branch = branch[0]
+		else
+			branch.map! do |twig| 
+				twig = flatten_leaves(twig) if twig.class == Array
+			end
+		end
+		return branch
+	end
+
+	def stringify(branch)
+		branch.map! do |twig| 
+			if twig.class == Array
+				twig = stringify(twig)
+			else
+				twig = "{ 'name' : '#{twig}: #{@percentages[twig]}%' }"
+			end
+		end
+		return branch
+	end
+
+	def nestify(branch)
+		if branch.class == Array
+			if branch[0].class == String && branch[1].class == String
+				branch = "{ 'children' : [ #{branch[0]}, #{branch[1]} ] }"
+			else
+				branch.map! do |twig| 
+					if twig.class == Array
+						twig = nestify(twig)
+					else
+						twig = twig
+					end
+				end
+			end
+		end
+		return branch
 	end
 end

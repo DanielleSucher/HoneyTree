@@ -4,7 +4,7 @@ $:.unshift File.expand_path('.')
 
 require 'mysql2'
 require 'csv'
-require 'honeytree-lib'
+require 'lib/honeytree'
 require 'optparse'
 
 

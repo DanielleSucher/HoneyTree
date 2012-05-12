@@ -15,12 +15,7 @@ ht = Honeytree.new
 ht.find_nearby_trees params['address'][0], "1"
 ht.find_tree_percentages
 ht.huffman_encode_trees
-
-results = "["
-ht.percentages.each do |k,v|
-	results.concat("{name: '#{k}', val: #{v}},")
-end
-results = results[0...-1] + "]"
+ht.parse_for_d3
 
 cgi.out {
     cgi.html {
@@ -34,7 +29,8 @@ cgi.out {
 				<a href='http://daniellesucher.com'><img src='banner.png' /></a>
 			</div>
 			<div id='chart'></div>
-			<script type='text/javascript'>create_graph(#{results});</script>"
+			<div id='viz'></div>
+			<script type='text/javascript'>drawTree(#{ht.d3});</script>"
 		}
     }
 }

@@ -5,7 +5,8 @@
 
 #banner,
 #info,
-#chart {
+#chart,
+#viz {
 	text-align: center;
 	margin: auto;	
 }
@@ -21,6 +22,6 @@
 }
 
 body {
-	background: url(bees.png);
+	background: url(img/bees.png);
 	font: 20px;
 }
