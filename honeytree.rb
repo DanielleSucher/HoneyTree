@@ -12,7 +12,7 @@ cgi = CGI.new 'html3'
 params = cgi.params
 
 ht = Honeytree.new
-ht.find_nearby_trees params['address'][0], "1"
+ht.find_nearby_trees params['coords'][0], params['address'][0], "2"
 ht.find_tree_percentages
 ht.huffman_encode_trees
 ht.parse_for_d3

@@ -9,15 +9,13 @@
 		<div id="banner">
 			<a href="http://daniellesucher.com"><img src="http://www.daniellesucher.com/wp-content/uploads/2012/01/des-banner17.jpg" /></a>
 		</div>
-<!-- 		<div id="info">
-			<a href="https://github.com/DanielleSucher/HoneyTree/">source code</a> | <a href="mailto:dsucher@gmail.com">email</a>
-		</div> -->
 		<br/><br/>
 		<div id="form">
 			<form name="findTrees" action="honeytree.rb">
 				Put in the address of your Brooklyn beehive to determine what trees your bees can forage from:<br/><br/>
 				<div id="inner_form">
 					<input type="text" name="address" id="address" value="enter your hive's NYC street address" onFocus="inputFocus(this)" onKeyPress="return noEnter()"><br/><br/>
+					<input type="hidden" name="coords" id="coords" value="">
 					<a href="javascript: geocodeAndSubmit()">Find nearby trees!</a>
 				</div>
 			</form>

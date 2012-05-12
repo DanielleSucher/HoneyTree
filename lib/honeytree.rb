@@ -72,7 +72,8 @@ class Honeytree
 	    d = earth_radius * great_circle_distance
 	end
 
-	def find_nearby_trees(point, miles)
+	def find_nearby_trees(point, address, miles)
+		@address = address
 		p = point.split(" ")
 		p.map! { |x| x = x.to_f }
 		m = miles.to_f
@@ -115,7 +116,7 @@ class Honeytree
 
 	def parse_for_d3
 		parser = HuffmanD3Parser.new
-		@d3 = parser.parse_for_d3 @encoded, @percentages
+		@d3 = parser.parse_for_d3 @encoded, @percentages, @address
 	end
 end
 
@@ -123,7 +124,8 @@ end
 class HuffmanD3Parser
 	attr_accessor :nested_array
 
-	def parse_for_d3(nested_array, percentages)
+	def parse_for_d3(nested_array, percentages, address)
+		@address = address
 		@nested_array = nested_array
 		@percentages = percentages
 		weightless = remove_weights @nested_array
@@ -132,7 +134,7 @@ class HuffmanD3Parser
 		until parsed.class == String
 			parsed = nestify parsed
 		end
-		# parsed.concat ";"
+		parsed = finalize parsed
 		return parsed
 	end
 
@@ -180,5 +182,10 @@ class HuffmanD3Parser
 			end
 		end
 		return branch
+	end
+
+	def finalize(tree)
+		parsed = "{ 'name' : '#{@address}',".concat tree[1..-1]
+		# tree.concat ";"
 	end
 end

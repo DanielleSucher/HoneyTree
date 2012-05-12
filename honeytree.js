@@ -40,13 +40,13 @@ function inputFocus(i){
 
 function geocodeAndSubmit(){
     var address = document.getElementById("address").value;
-    console.log(address);
-    console.log("hi!");
+    // console.log(address);
     var geocoder = new google.maps.Geocoder();
     geocoder.geocode( { 'address': address}, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
             coords = results[0]['geometry']['location']['$a'] + ' ' + results[0]['geometry']['location']['ab'];
-            document.getElementById("address").value = coords;
+            document.getElementById("coords").value = coords;
+            alert(document.getElementById("coords").value);
             document.findTrees.submit();
         } else {
             alert("Geocode was not successful for the following reason: " + status);
@@ -61,8 +61,8 @@ function noEnter() {
 function drawTree(data) {
     // Create a svg canvas
     var vis = d3.select("#viz").append("svg:svg")
-    .attr("width", 1200)
-    .attr("height", 1200)
+    .attr("width", 1000)
+    .attr("height", 1000)
     .append("svg:g")
     .attr("transform", "translate(0, 40)"); // shift everything to the right
 
@@ -72,23 +72,21 @@ function drawTree(data) {
 
     // Create a tree "canvas"
     var tree = d3.layout.tree()
-    .size([1200,1200])
+    .size([800,800])
     .separation(scaledSeparation);
 
     var diagonal = d3.svg.diagonal()
-    // shift it root-at-the-bottom
-    .projection(function(d) { return [d.x, (1190 - d.y)]; });
+    // shift it to root-at-the-bottom
+    .projection(function(d) { return [d.x, (600 - d.y/1.5)]; });
 
-    // Preparing the data for the tree layout, convert data into an array of nodes
     var nodes = tree.nodes(data);
-    // Create an array with all the links
     var links = tree.links(nodes);
 
     console.log(data);
     console.log(nodes);
     console.log(links);
 
-    var link = vis.selectAll("pathlink")
+    var link = vis.selectAll("path.link")
     .data(links)
     .enter()
     .append("svg:path")
@@ -101,7 +99,7 @@ function drawTree(data) {
     .data(nodes)
     .enter()
     .append("svg:g")
-    .attr("transform", function(d) { return "translate(" + d.x + "," + (1190 - d.y) + ")"; });
+    .attr("transform", function(d) { return "translate(" + d.x + "," + (600 - d.y/1.5) + ")"; });
 
     var leafFill = function(d){
         return d.children == null ? "black" : "none";
@@ -114,8 +112,10 @@ function drawTree(data) {
 
     // place the name atribute left or right depending if children
     node.append("svg:text")
-    .attr("dx", function(d) { if(d.parent){return d.parent.children[0].name == d.name ? -60 : 3;}else{return 3;} })
-    .attr("dy", function(d) { if(d.parent){return d.parent.children[0].name == d.name ? -8 : 10;}else{return -8;} })
-    .attr("text-anchor", function(d) { return d.children ? "end" : "start"; })
-    .text(function(d) { return d.children ? "" : d.name; });
+    .attr("dx", 3)
+    // .attr("dy", -5)
+    .attr("dy", function(d) { return d.children && !d.parent ? 20 : -5; })
+    .attr("text-anchor", function(d) { return d.children && !d.parent ? "middle" : "start"; })
+    .attr("transform", function(d) { return d.children && !d.parent ? "null" : "rotate(340)"; })
+    .text(function(d) { return d.children && d.parent ? "" : d.name; });
 }
