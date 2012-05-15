@@ -82,10 +82,7 @@ function drawTree(data) {
     var nodes = tree.nodes(data);
     var links = tree.links(nodes);
 
-    console.log(data);
-    console.log(nodes);
-    console.log(links);
-
+    // Create the tree branches as those nice curved black lines
     var link = vis.selectAll("path.link")
     .data(links)
     .enter()
@@ -105,17 +102,30 @@ function drawTree(data) {
         return d.children == null ? "black" : "none";
     };
 
-    // Add the dot at every node
-    node.append("svg:circle")
-    .attr("r", 2.5)
+    function leafPath(x,y) {
+        // Created the path in Adobe Illustrator by sketching with my tablet
+        return "M42.125,85.543c-2.827-5.804-11.756-10.715-18.899-12.798" +
+            "S-0.286,62.18,14,52.358s25.446-1.042,23.81-8.036c-1.637-6.994-12.054-5.357-8.929-11.905s8.482-2.083,14.583-9.672" +
+            "S52.096,3.4,55.815,10.692s0.594,15.773,6.547,18.006s24.703,5.06,12.203,12.649s-25.298,9.821-13.244,16.071" +
+            "s33.482,11.16,5.506,20.685s-26.191,4.614-25.298,10.715c0.592,4.045,9.219-65.417,9.971-66.37c2.231-2.827-6.422,20.834-1.5,20.387" +
+            "s17.721-5.952,20.25-5.06S51.328,41.644,50,44.918c-1.328,3.274-8.173-9.822-13.232-9.97s21.131,8.184,6.845,29.464" +
+            "s-10.565-12.203-25.595-4.167s60.416,7.143,53.72,8.929";
+    }
+
+    node.append("svg:path")
+    .attr("d", function() { return leafPath(d.x, d.y); })
+    // Translate the leaves to match the node locations, rotate and adjust opacity for legibility, and
+    // scale according to the weight of each node
+    .attr("transform", function(d) { return !d.percent ? "null" : "scale(" + (0.1 * d.percent) + ")" + "rotate(15)" + "translate(-42.125,-85.543)"; })
+    .style("fill-opacity", 0.7)
     .style("fill", leafFill);
 
-    // place the name atribute left or right depending if children
+    // place the name atribute angled and right if leaf, centered and horizontal if root
     node.append("svg:text")
     .attr("dx", 3)
     // .attr("dy", -5)
     .attr("dy", function(d) { return d.children && !d.parent ? 20 : -5; })
     .attr("text-anchor", function(d) { return d.children && !d.parent ? "middle" : "start"; })
-    .attr("transform", function(d) { return d.children && !d.parent ? "null" : "rotate(340)"; })
+    .attr("transform", function(d) { return d.children && !d.parent ? "null" : "rotate(330)"; })
     .text(function(d) { return d.children && d.parent ? "" : d.name; });
 }

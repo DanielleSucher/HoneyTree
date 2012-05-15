@@ -161,7 +161,7 @@ class HuffmanD3Parser
 			if twig.class == Array
 				twig = stringify(twig)
 			else
-				twig = "{ 'name' : '#{twig}: #{@percentages[twig]}%' }"
+				twig = "{ 'name' : '#{twig}: #{@percentages[twig]}%', 'percent' : '#{@percentages[twig]}' }"
 			end
 		end
 		return branch
