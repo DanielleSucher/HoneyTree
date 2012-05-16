@@ -77,7 +77,7 @@ function drawTree(data) {
 
     var diagonal = d3.svg.diagonal()
     // shift it to root-at-the-bottom
-    .projection(function(d) { return [d.x, (600 - d.y/1.5)]; });
+    .projection(function(d) { return [(100 + d.x), (710 - d.y/1.5)]; });
 
     var nodes = tree.nodes(data);
     var links = tree.links(nodes);
@@ -96,10 +96,10 @@ function drawTree(data) {
     .data(nodes)
     .enter()
     .append("svg:g")
-    .attr("transform", function(d) { return "translate(" + d.x + "," + (600 - d.y/1.5) + ")"; });
+    .attr("transform", function(d) { return "translate(" + (100 + d.x) + "," + (710 - d.y/1.5) + ")"; });
 
     var leafFill = function(d){
-        return d.children == null ? "black" : "none";
+        return d.children == null ? "green" : "none";
     };
 
     function leafPath(x,y) {
@@ -122,10 +122,11 @@ function drawTree(data) {
 
     // place the name atribute angled and right if leaf, centered and horizontal if root
     node.append("svg:text")
-    .attr("dx", 3)
+    .attr("dx", -3)
     // .attr("dy", -5)
-    .attr("dy", function(d) { return d.children && !d.parent ? 20 : -5; })
+    .attr("dy", function(d) { return d.children && !d.parent ? 20 : 1; })
     .attr("text-anchor", function(d) { return d.children && !d.parent ? "middle" : "start"; })
-    .attr("transform", function(d) { return d.children && !d.parent ? "null" : "rotate(330)"; })
-    .text(function(d) { return d.children && d.parent ? "" : d.name; });
+    .attr("transform", function(d) { return d.children && !d.parent ? "null" : "translate(-5,-10) rotate(270)"; })
+    .text(function(d) { return d.children && d.parent ? "" : d.name; })
+    .style("font-size", "18px");
 }
