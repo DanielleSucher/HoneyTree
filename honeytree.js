@@ -77,7 +77,7 @@ function drawTree(data) {
 
     var diagonal = d3.svg.diagonal()
     // shift it to root-at-the-bottom
-    .projection(function(d) { return [(100 + d.x), (710 - d.y/1.5)]; });
+    .projection(function(d) { return [(100 + d.x), (730 - d.y/1.5)]; });
 
     var nodes = tree.nodes(data);
     var links = tree.links(nodes);
@@ -97,7 +97,7 @@ function drawTree(data) {
     .data(nodes)
     .enter()
     .append("svg:g")
-    .attr("transform", function(d) { return "translate(" + (100 + d.x) + "," + (710 - d.y/1.5) + ")"; });
+    .attr("transform", function(d) { return "translate(" + (100 + d.x) + "," + (730 - d.y/1.5) + ")"; });
 
     var leafFill = function(d){
         return d.children == null ? "green" : "none";
@@ -147,5 +147,5 @@ function drawTree(data) {
     .attr("text-anchor", function(d) { return d.children && !d.parent ? "middle" : "start"; })
     .attr("transform", transformText)
     .text(function(d) { return d.children && d.parent ? "" : d.name; })
-    .style("font-size", "19px");
+    .style("font-size", "18px");
 }
