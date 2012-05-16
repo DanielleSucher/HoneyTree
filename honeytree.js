@@ -113,11 +113,29 @@ function drawTree(data) {
             "s-10.565-12.203-25.595-4.167s60.416,7.143,53.72,8.929";
     }
 
+    function rotateLeaves(d){
+        if (!d.percent) {
+            return "null";
+        } else if (d.parent && d.parent.children[0].name == d.name) {
+            return "scale(" + (0.1 * d.percent) + ")" + "rotate(-35)" + "translate(-42.125,-85.543)";
+        } else {
+            return "scale(" + (0.1 * d.percent) + ")" + "rotate(15)" + "translate(-42.125,-85.543)";
+        }
+    }
+
+    function transformText(d){
+        if (!d.parent) {
+            return "null";
+        } else if (d.parent && d.parent.children[0].name == d.name) {
+            return "translate(-5,-15) rotate(270)";
+        } else {
+            return "translate(15,-15) rotate(270)";
+        }
+    }
+
     node.append("svg:path")
     .attr("d", function() { return leafPath(d.x, d.y); })
-    // Translate the leaves to match the node locations, rotate and adjust opacity for legibility, and
-    // scale according to the weight of each node
-    .attr("transform", function(d) { return !d.percent ? "null" : "scale(" + (0.1 * d.percent) + ")" + "rotate(15)" + "translate(-42.125,-85.543)"; })
+    .attr("transform", rotateLeaves)
     .style("fill-opacity", 0.7)
     .style("fill", leafFill);
 
@@ -127,7 +145,7 @@ function drawTree(data) {
     // .attr("dy", -5)
     .attr("dy", function(d) { return d.children && !d.parent ? 20 : 1; })
     .attr("text-anchor", function(d) { return d.children && !d.parent ? "middle" : "start"; })
-    .attr("transform", function(d) { return d.children && !d.parent ? "null" : "translate(-5,-10) rotate(270)"; })
+    .attr("transform", transformText)
     .text(function(d) { return d.children && d.parent ? "" : d.name; })
-    .style("font-size", "18px");
+    .style("font-size", "19px");
 }
