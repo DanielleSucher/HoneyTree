@@ -89,7 +89,8 @@ function drawTree(data) {
     .append("svg:path")
     .attr("class", "link")
     .attr("d", diagonal)
-    .style("stroke", "brown")
+    .style("stroke", "#633A11")
+    .style("stroke-width", 3)
     .style("fill", "none");
 
     var node = vis.selectAll("g.node")
