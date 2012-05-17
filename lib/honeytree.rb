@@ -103,13 +103,22 @@ class Honeytree
 		@percentages['other'] = (100 - @percentages.inject(0) { |res,(k,v)| res + v }).round(2)
 	end
 
+	def insert_branch(branch)
+ 		@encoded.each_with_index do |node, i|
+ 			if branch[-1] <= node[-1]
+ 				@encoded.insert i, branch
+ 				return @encoded
+ 			end
+ 		end
+ 		@encoded.push(branch)
+	end
+
 	def huffman_encode_trees
 		@encoded = @percentages.sort_by { |k,v| v }
 		until @encoded.length == 1
 			a,b = @encoded.shift, @encoded.shift
 			branch = [a, b, (a[-1] + b[-1]).round(2)]
-			@encoded.push branch
-			@encoded.sort! { |a,b| a[-1] <=> b[-1] }
+			insert_branch branch
 		end
 		@encoded = @encoded[0]
 	end
